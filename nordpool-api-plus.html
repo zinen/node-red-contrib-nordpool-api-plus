@@ -1,0 +1,118 @@
+<script type="text/javascript">
+    RED.nodes.registerType('nordpool-api-plus',{
+        category: 'request',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""},
+            area: {value:"Oslo"},
+            currency: {Value:"EUR"},
+        },
+        inputs:1,
+        outputs:1,
+        icon: "white-globe.png",
+        label: function() {
+            return this.name ||"nordpool-api+";
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="nordpool-api-plus">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-area"><i class="fa fa-globe"></i> Area</label>
+        <select value="" id="node-input-area">
+            <option value="SYS">SYS</option>
+            <option value="SE1">SE1</option>
+            <option value="SE2">SE2</option>
+            <option value="SE3">SE3</option>
+            <option value="SE4">SE4</option>
+            <option value="FI">FI</option>
+            <option value="DK1">DK1</option>
+            <option value="DK2">DK2</option>
+            <option value="Oslo">Oslo</option>
+            <option value="Kr.sand">Kr.sand</option>
+            <option value="Bergen">Bergen</option>
+            <option value="Molde">Molde</option>
+            <option value="Tr.heim">Tr.heim</option>
+            <option value="Tromsø">Tromsø</option>
+            <option value="EE">EE</option>
+            <option value="LV">LV</option>
+            <option value="LT">LT</option>
+            <option value="AT">AT</option>
+            <!-- Options below are not supported by nordpool APIv2.0.0
+            <option value="BE">BE</option>
+            <option value="DE-LU">DE-LU</option>
+            <option value="FR">FR</option>
+            <option value="NL">NL</option>  -->
+        </select>
+    </div>
+    <div class="form-tips">Find your area code at <a href="https://www.nordpoolspot.com/">www.nordpoolspot.com</a></div>
+    <div class="form-row">
+        <label for="node-input-currency"><i class="fa fa-usd"></i> Currency pr MWh</label>
+        <select value="" id="node-input-currency">
+            <option value="EUR">EUR</option>
+            <option value="DKK">DKK</option>
+            <option value="NOK">NOK</option>
+            <option value="SEK">SEK</option>
+        </select>
+    </div>
+    
+</script>
+
+<script type="text/html" data-help-name="nordpool-api-plus">
+    <p>A Node-Red Node for collecting `day ahead` prices from Nord Pool Group.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>area
+            <span class="property-type">String</span>
+        </dt>
+        <dd>
+            If set in msg, will accept the area as a string, else the node's settings is used. Possible areas can be found on the <a href="https://github.com/samuelmr/nordpool-node#options">webpage of the API</a>.
+        </dd>
+        <dt>currency
+            <span class="property-type">String</span>
+        </dt>
+        <dd>
+            If set in msg, will accept the currency as a string, else the node's settings is used. Possible currencies can be found on the <a href="https://github.com/samuelmr/nordpool-node#options">webpage of the API</a>.
+        </dd>
+        <dt>date
+            <span class="property-type">date</span>
+        </dt>
+        <dd>
+            If not defined in input todays date will be used.
+        </dd>
+    </dl>
+    <h3>Output</h3>
+    <p>Returns an array with 24 objects. Each containing data for the price of the stated hour</p>
+    <p><i>An hour of 04:00 means this price is from 04:00 to 04:59</i></p>
+    <dl class="message-properties">
+        <dt>timestamp
+            <span class="property-type">timestamp</span>
+        </dt>
+        <dd>
+            UTC timestamp of hour with this price.
+        </dd>
+        <dt>price
+            <span class="property-type">number</span>
+        </dt>
+        <dd>
+            The price pr. MWh and without local taxes.
+        </dd>
+        <dt>currency
+            <span class="property-type">String</span>
+        </dt>
+        <dd>
+            The currency of the price.
+        </dd>
+        <dt>area
+            <span class="property-type">String</span>
+        </dt>
+        <dd>
+            The area the returned price applies to.
+        </dd>
+    </dl>
+
+</script>
