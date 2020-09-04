@@ -43,7 +43,8 @@ module.exports = function (RED) {
           const values = {
             timestamp: results[i].date.tz('Europe/Oslo'),
             price: results[i].value,
-            currency: opts.currency
+            currency: opts.currency,
+            area: AREA
           }
           pricesOut.push(values)
         }
