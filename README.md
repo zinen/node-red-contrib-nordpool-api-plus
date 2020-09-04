@@ -3,7 +3,7 @@
 ### This is now changed to be in msg.payload
 
 ## Node Red Nordpool API
-A Node-Red Node for collecting "day ahead" prices from NorpoolGroup.
+A Node-Red Node for collecting "day ahead" prices from Nord Pool Group.
 
 ## Installation
 Go to your Node-RED user folder (e.g. ~/.node-red) and run:
@@ -16,7 +16,7 @@ sudo npm i node-red-contrib-nordpool-api
 
 The area and currency can be changed by selecting from the drop down menu in the properties:
 
-![alt text](https://github.com/Csstenersen/2019/blob/master/png/example.png?raw=true "Example")
+![alt text](/png/example.png)
 
 ### example:
 Use a inject node to trigger a request to nordpool
@@ -28,12 +28,12 @@ If the current time is before 15:00 it returns an array of 24 objects. one pr.ho
 Objects contains this properties: `Area`, `Valuta`, `Price` and `Timestamp`.
 
 
-![alt text](https://github.com/Csstenersen/2019/blob/master/png/example3.png?raw=true "Example")
+![alt text](/png/example3.png)
 
 ### Example with UI chart:
 
 Use a function node to convert `msg` to values readable for UI chart node:
-![alt text](https://github.com/Csstenersen/2019/blob/master/png/example5.png?raw=true "Example")
+![alt text](/png/example5.png)
 
 the function node in this example contains:
 
@@ -52,8 +52,8 @@ return;
 
 the result is that the function node pushes a payload for every object in `msg`:
 
-![alt text](https://github.com/Csstenersen/2019/blob/master/png/example7.png?raw=true "Example")
+![alt text](/png/example7.png)
 
 result in UI:
 
-![alt text](https://github.com/Csstenersen/2019/blob/master/png/example6.png?raw=true "Example")
+![alt text](/png/example6.png)
