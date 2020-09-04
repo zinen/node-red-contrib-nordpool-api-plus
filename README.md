@@ -1,14 +1,12 @@
-# IMPORTANT UPDATE WITH CAUTION!!
-### Major bugfix in release 3.0.0 where in release 2.0.0 the output from the node was an array in the msg root.
-### This is now changed to be in msg.payload
-
-## Node Red Nordpool API
+# Node Red Nordpool API
 A Node-Red Node for collecting "day ahead" prices from Nord Pool Group.
+
+*This is a fork of the original node-red-contrib-nordpool-api*
 
 ## Installation
 Go to your Node-RED user folder (e.g. ~/.node-red) and run:
 ```
-sudo npm i node-red-contrib-nordpool-api
+sudo npm i node-red-contrib-nordpool-api-plus
 ```
 
 ## Usage
