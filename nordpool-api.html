@@ -1,69 +1,114 @@
 <script type="text/javascript">
-    RED.nodes.registerType('nordpool-api',{
-        category: 'Request',
+    RED.nodes.registerType('nordpool-api-plus',{
+        category: 'request',
         color: '#a6bbcf',
         defaults: {
             name: {value:""},
             area: {value:"Oslo"},
-            currency: {Value:"NOK"},
+            currency: {Value:"EUR"},
         },
         inputs:1,
         outputs:1,
         icon: "white-globe.png",
         label: function() {
-            return this.name ||"nordpool-api";
+            return this.name ||"nordpool-api+";
         }
     });
 </script>
 
-<script type="text/x-red" data-template-name="nordpool-api">
+<script type="text/html" data-template-name="nordpool-api-plus">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <label for="node-input-name"><i class="icon-tag"></i>Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
     <div class="form-row">
-        <label for="node-input-area"><i class="icon-tag"></i> area</label>
-        
-        <select value="" id="node-input-area" placeholder="area">
-            <option value="BERGEN">BERGEN</option>
-            <option value="DK1">DK1</option>
-            <option value="DK2">DK2</option>
-            <option value="EE">EE</option>
-            <option value="ELE">ELE</option>
-            <option value="FRE">FRE</option>
-            <option value="KR.SAND">KR.SAND</option>
-            <option value="KT">KT</option>
-            <option value="LT">LT</option>
-            <option value="LV">LV</option>
-            <option value="MOLDE">MOLDE</option>
-            <option value="OSLO">OSLO</option>
-            <option value="SE">SE</option>
+        <label for="node-input-area"><i class="icon-tag"></i>Area</label>
+        <select value="" id="node-input-area">
+            <option value="SYS">SYS</option>
             <option value="SE1">SE1</option>
             <option value="SE2">SE2</option>
             <option value="SE3">SE3</option>
             <option value="SE4">SE4</option>
-            <option value="SYS">SYS</option>
-            <option value="TR.HEIM">TR.HEIM</option>
-            <option value="TROMSØ">TROMSØ</option>
+            <option value="FI">FI</option>
+            <option value="DK1">DK1</option>
+            <option value="DK2">DK2</option>
+            <option value="Oslo">Oslo</option>
+            <option value="Kr.sand">Kr.sand</option>
+            <option value="Bergen">Bergen</option>
+            <option value="Molde">Molde</option>
+            <option value="Tr.heim">Tr.heim</option>
+            <option value="Tromsø">Tromsø</option>
+            <option value="EE">EE</option>
+            <option value="LV">LV</option>
+            <option value="LT">LT</option>
+            <option value="AT">AT</option>
+            <!-- Options below are not supported by nordpool APIv2.0.0
+            <option value="BE">BE</option>
+            <option value="DE-LU">DE-LU</option>
+            <option value="FR">FR</option>
+            <option value="NL">NL</option>  -->
         </select>
+        <div class="form-tips">Find your area code at <a href="https://www.nordpoolspot.com/">www.nordpoolspot.com</div>
+
+        
     </div>
     <div class="form-row">
-        <label for="node-input-currency"><i class="icon-tag"></i> currency</label>
-        
-        <select value="" id="node-input-currency" placeholder="currency">
-            <option value="EUR">EUR/MWh</option>
-            <option value="NOK">NOK/MWh</option>
-            <option value="DKK">DKK/MWh</option>
-            <option value="SEK">SEK/MWh</option>
+        <label for="node-input-currency"><i class="icon-tag"></i>Currency pr MWh</label>
+        <select value="" id="node-input-currency">
+            <option value="EUR">EUR</option>
+            <option value="DKK">DKK</option>
+            <option value="NOK">NOK</option>
+            <option value="SEK">SEK</option>
         </select>
     </div>
     
 </script>
 
-<script type="text/html" data-help-name="nordpool-api">
+<script type="text/html" data-help-name="nordpool-api-plus">
     <p>A Node-Red Node for collecting `day ahead` prices from Nord Pool Group.</p>
-    <p>By default in input the node collect the price for the next hour from area `Oslo` 
-    in currency `NOK/MWh` The area and currency can be changed by selecting from the drop down menu 
-    in the properties menu</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>area
+            <span class="property-type">string</span>
+        </dt>
+        <dd>
+            If not set in node, will accept the area as a string. Possible areas can be found on the <a href="https://github.com/samuelmr/nordpool-node#options">webpage of the API</a>.
+        </dd>
+        <dt>currency
+            <span class="property-type">string</span>
+        </dt>
+        <dd>
+            If not set in node, will accept the currency as a string. Possible currencies can be found on the <a href="https://github.com/samuelmr/nordpool-node#options">webpage of the API</a>.
+        </dd>
+        <dt>date
+            <span class="property-type">date</span>
+        </dt>
+        <dd>
+            If not defined in input todays date will be used.
+        </dd>
+    </dl>
+    <h3>Output</h3>
+    <p>Returns an array with 24 objects. Each containing data for the price of the stated hour</p>
+    <p><i>An hour of 04:00 means this price is from 04:00 to 04:59</i></p>
+    <dl class="message-properties">
+        <dt>timestamp
+            <span class="property-type">timestamp</span>
+        </dt>
+        <dd>
+            UTC timestamp of hour with this price.
+        </dd>
+        <dt>price
+            <span class="property-type">number</span>
+        </dt>
+        <dd>
+            The price pr. MWh and without local taxes.
+        </dd>
+        <dt>currency
+            <span class="property-type">string</span>
+        </dt>
+        <dd>
+            The currency of the price.
+        </dd>
+    </dl>
 
 </script>
