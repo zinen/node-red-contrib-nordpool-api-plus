@@ -22,7 +22,6 @@ module.exports = function (RED) {
 
     node.on('input', function (msg) {
       this.status({ fill: 'yellow', shape: 'dot', text: 'Getting prices' })
-      var msg = { payload: {} }
 
       // Variabler:
 
