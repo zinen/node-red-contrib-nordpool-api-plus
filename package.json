@@ -1,0 +1,29 @@
+{
+  "author": {
+    "name": "Christopher Stenersen"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "moment-timezone": "^0.5.13",
+    "nordpool": "^2.0.0",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
+  },
+  "deprecated": false,
+  "description": "A Node-Red Node for collecting `day ahead` prices from NorpoolGroup.",
+  "keywords": [
+    "node-red"
+  ],
+  "license": "ISC",
+  "main": "nordpool-api.js",
+  "name": "node-red-contrib-nordpool-api",
+  "node-red": {
+    "nodes": {
+      "nordpool-api": "nordpool-api.js"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "3.0.0"
+}
