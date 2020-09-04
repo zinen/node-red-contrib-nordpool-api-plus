@@ -15,7 +15,7 @@ This node uses the unofficial nordpool API [found here](https://github.com/samue
 
 The area and currency can be changed by selecting from the drop down menu in the properties, or by inputting the setting via a `msg`:
 
-![](/png/example.png)
+![](/img/example.png)
 
 ### example:
 Use a inject node to trigger a request to nordpool, to get prices for today.
@@ -24,14 +24,14 @@ Its also possible to inject a `msg.date` to get price from a specific date, or p
 
 An 24 object long array is returned on success. The objects contains this properties: `timestamp`, `price` and `currency`.
 
-![](/png/example3.png)
+![](/img/example3.png)
 
 ### Example with dashboard chart:
 In Node-RED editor, click menu at top right corner -> Import -> Examples -> node-red-contrib-nordpool-api-plus -> basic-dashboard.
 
 Use a function node to convert `msg` to values readable for dashboard chart node:
 
-![](/png/example5.png)
+![](/img/example5.png)
 
 the function node in this example contains:
 
@@ -49,4 +49,4 @@ for (var i = 0; i<msg.payload.length;i++){
 
 result in dashboard chart:
 
-![](/png/example6.png)
+![](/img/example6.png)
