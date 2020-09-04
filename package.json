@@ -10,7 +10,7 @@
     "request-promise": "^4.2.1"
   },
   "deprecated": false,
-  "description": "A Node-Red Node for collecting `day ahead` prices from NorpoolGroup.",
+  "description": "A Node-Red Node for collecting `day ahead` prices from Nord Pool Group.",
   "keywords": [
     "node-red"
   ],
