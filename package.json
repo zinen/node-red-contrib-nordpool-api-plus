@@ -1,6 +1,6 @@
 {
   "author": {
-    "name": "Christopher Stenersen"
+    "name": "zinen"
   },
   "bundleDependencies": false,
   "dependencies": {
@@ -9,11 +9,13 @@
   "deprecated": false,
   "description": "A Node-Red Node for collecting `day ahead` prices from Nord Pool Group.",
   "keywords": [
-    "node-red"
+    "node-red",
+    "nord pool",
+    "watt prices"
   ],
   "license": "ISC",
   "main": "nordpool-api-plus.js",
-  "name": "node-red-contrib-nordpool-api",
+  "name": "node-red-contrib-nordpool-api-plus",
   "node-red": {
     "nodes": {
       "nordpool-api": "nordpool-api-plus.js"
@@ -22,5 +24,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "4.0.0"
+  "version": "4.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zinen/node-red-contrib-nordpool-api-plus"
+  },
+  "bugs": {
+    "url": "https://github.com/zinen/node-red-contrib-nordpool-api-plus/issues"
+  }
 }
