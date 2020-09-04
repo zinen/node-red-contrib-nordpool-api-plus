@@ -18,11 +18,11 @@
 
 <script type="text/html" data-template-name="nordpool-api-plus">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-tag"></i>Name</label>
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
     <div class="form-row">
-        <label for="node-input-area"><i class="icon-tag"></i>Area</label>
+        <label for="node-input-area"><i class="fa fa-globe"></i> Area</label>
         <select value="" id="node-input-area">
             <option value="SYS">SYS</option>
             <option value="SE1">SE1</option>
@@ -48,12 +48,10 @@
             <option value="FR">FR</option>
             <option value="NL">NL</option>  -->
         </select>
-        <div class="form-tips">Find your area code at <a href="https://www.nordpoolspot.com/">www.nordpoolspot.com</div>
-
-        
     </div>
+    <div class="form-tips">Find your area code at <a href="https://www.nordpoolspot.com/">www.nordpoolspot.com</a></div>
     <div class="form-row">
-        <label for="node-input-currency"><i class="icon-tag"></i>Currency pr MWh</label>
+        <label for="node-input-currency"><i class="fa fa-usd"></i> Currency pr MWh</label>
         <select value="" id="node-input-currency">
             <option value="EUR">EUR</option>
             <option value="DKK">DKK</option>
@@ -69,16 +67,16 @@
     <h3>Inputs</h3>
     <dl class="message-properties">
         <dt>area
-            <span class="property-type">string</span>
+            <span class="property-type">String</span>
         </dt>
         <dd>
-            If not set in node, will accept the area as a string. Possible areas can be found on the <a href="https://github.com/samuelmr/nordpool-node#options">webpage of the API</a>.
+            If set in msg, will accept the area as a string, else the node's settings is used. Possible areas can be found on the <a href="https://github.com/samuelmr/nordpool-node#options">webpage of the API</a>.
         </dd>
         <dt>currency
-            <span class="property-type">string</span>
+            <span class="property-type">String</span>
         </dt>
         <dd>
-            If not set in node, will accept the currency as a string. Possible currencies can be found on the <a href="https://github.com/samuelmr/nordpool-node#options">webpage of the API</a>.
+            If set in msg, will accept the currency as a string, else the node's settings is used. Possible currencies can be found on the <a href="https://github.com/samuelmr/nordpool-node#options">webpage of the API</a>.
         </dd>
         <dt>date
             <span class="property-type">date</span>
@@ -104,7 +102,7 @@
             The price pr. MWh and without local taxes.
         </dd>
         <dt>currency
-            <span class="property-type">string</span>
+            <span class="property-type">String</span>
         </dt>
         <dd>
             The currency of the price.
