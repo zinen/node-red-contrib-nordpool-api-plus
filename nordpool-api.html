@@ -6,13 +6,12 @@
             name: {value:""},
             area: {value:"Oslo"},
             currency: {Value:"NOK"},
-            ahead_hours: {Value:"3"}
         },
         inputs:1,
         outputs:1,
         icon: "white-globe.png",
         label: function() {
-            return this.name||"nordpool-api";
+            return this.name ||"nordpool-api";
         }
     });
 </script>
@@ -26,22 +25,26 @@
         <label for="node-input-area"><i class="icon-tag"></i> area</label>
         
         <select value="" id="node-input-area" placeholder="area">
-            <option value="SYS">SYS</option>
+            <option value="BERGEN">BERGEN</option>
+            <option value="DK1">DK1</option>
+            <option value="DK2">DK2</option>
+            <option value="EE">EE</option>
+            <option value="ELE">ELE</option>
+            <option value="FRE">FRE</option>
+            <option value="KR.SAND">KR.SAND</option>
+            <option value="KT">KT</option>
+            <option value="LT">LT</option>
+            <option value="LV">LV</option>
+            <option value="MOLDE">MOLDE</option>
+            <option value="OSLO">OSLO</option>
+            <option value="SE">SE</option>
             <option value="SE1">SE1</option>
             <option value="SE2">SE2</option>
             <option value="SE3">SE3</option>
             <option value="SE4">SE4</option>
-            <option value="FI">FI</option>
-            <option value="DK1">DK1</option>
-            <option value="DK2">DK2</option>
-            <option value="Oslo">Oslo</option>
-            <option value="Kr.sand">Kr.sand</option>
-            <option value="Bergen">Bergen</option>
-            <option value="Molde">Molde</option>
-            <option value="Tr.heim">Tr.heim</option>
-            <option value="Tromsø">Tromsø</option>
-            <option value="EE">EE</option>
-            <option value="LV">LV</option>
+            <option value="SYS">SYS</option>
+            <option value="TR.HEIM">TR.HEIM</option>
+            <option value="TROMSØ">TROMSØ</option>
         </select>
     </div>
     <div class="form-row">
