@@ -13,8 +13,8 @@ module.exports = function (RED) {
     node.on('input', function (msg, send, done) {
       this.status({ fill: 'yellow', shape: 'dot', text: 'Getting prices' })
 
-      const AREA = node.area || msg.area || 'Oslo'
-      const CURRENCY = node.currency || msg.currency || 'EUR'
+      const AREA = msg.area || node.area || 'Oslo'
+      const CURRENCY = msg.currency || node.currency || 'EUR'
       let date
       if (msg.date) {
         try {
