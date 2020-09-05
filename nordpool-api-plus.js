@@ -10,6 +10,8 @@ module.exports = function (RED) {
     const node = this
     const nordpool = require('nordpool')
 
+    this.status({ text: 'Ready' })
+
     node.on('input', function (msg, send, done) {
       this.status({ fill: 'blue', shape: 'dot', text: 'Getting prices' })
 
@@ -36,6 +38,7 @@ module.exports = function (RED) {
       const pricesOut = []
       prices.hourly(opts, function (error, results) {
         if (error) {
+          node.status({ fill: 'red', text: 'Error while receiving data' })
           done(error)
           return
         }
