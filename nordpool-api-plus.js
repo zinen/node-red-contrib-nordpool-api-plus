@@ -11,7 +11,7 @@ module.exports = function (RED) {
     const nordpool = require('nordpool')
 
     node.on('input', function (msg, send, done) {
-      this.status({ fill: 'yellow', shape: 'dot', text: 'Getting prices' })
+      this.status({ fill: 'blue', shape: 'dot', text: 'Getting prices' })
 
       const AREA = msg.area || node.area || 'Oslo'
       const CURRENCY = msg.currency || node.currency || 'EUR'
@@ -37,6 +37,19 @@ module.exports = function (RED) {
       prices.hourly(opts, function (error, results) {
         if (error) {
           done(error)
+          return
+        }
+        // Check if data is received from API call
+        if (results.length === 0) {
+          // It seems that all areas support EUR, but not other currencies
+          if (opts.area !== 'EUR') {
+            node.status({ fill: 'yellow', text: 'No data. Some areas support EUR as currency' })
+          } else {
+            node.status({ fill: 'yellow', text: 'No data found' })
+          }
+          msg.payload = null
+          send(msg)
+          done()
           return
         }
         for (var i = 0; i < results.length; i++) {
