@@ -81,18 +81,18 @@
             <span class="property-type">date</span>
         </dt>
         <dd>
-            If not defined in input todays date will be used.
+            If not defined in input todays date will be used.  If you request tomorrows data before 14:42 theres risk that data is not available yet and you will get the data from the current date. See <a href="https://github.com/samuelmr/nordpool-node/issues/1#issuecomment-316583765" target="_blank">API issue#1</a>.
         </dd>
     </dl>
     <h3>Output</h3>
-    <p>Returns an array with 24 objects. Each containing data for the price of the stated hour</p>
-    <p><i>An hour of 04:00 means this price is from 04:00 to 04:59</i></p>
+    <p>Returns an array with 24 objects.</p>
     <dl class="message-properties">
         <dt>timestamp
             <span class="property-type">timestamp</span>
         </dt>
         <dd>
-            UTC timestamp of hour with this price.
+            UTC timestamp of hour with this price. 
+            <p><i>An hour of 04:00 means this price is valid from 04:00 to 04:59</i></p>
         </dd>
         <dt>price
             <span class="property-type">number</span>
