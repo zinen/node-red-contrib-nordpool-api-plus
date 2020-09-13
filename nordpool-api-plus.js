@@ -45,8 +45,8 @@ module.exports = function (RED) {
         // Check if data is received from API call
         if (results.length === 0) {
           // It seems that all areas support EUR, but not other currencies
-          if (opts.area !== 'EUR') {
-            node.status({ fill: 'yellow', text: 'No data. Some areas support EUR as currency' })
+          if (opts.currency !== 'EUR') {
+            node.status({ fill: 'yellow', text: 'No data. Some areas only support EUR as currency' })
           } else {
             node.status({ fill: 'yellow', text: 'No data found' })
           }
@@ -57,7 +57,7 @@ module.exports = function (RED) {
         }
         for (var i = 0; i < results.length; i++) {
           const values = {
-            timestamp: results[i].date.tz('Europe/Oslo'),
+            timestamp: results[i].date.tz('Europe/Oslo'), // Convert moment object to native js time and date (UTC)
             price: results[i].value,
             currency: opts.currency,
             area: AREA
