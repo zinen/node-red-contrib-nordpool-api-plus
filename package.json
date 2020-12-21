@@ -4,8 +4,8 @@
   },
   "bundleDependencies": false,
   "dependencies": {
-    "moment-timezone": "^0.5.31",
-    "nordpool": "^2.0.0"
+    "moment-timezone": "^0.5.32",
+    "nordpool": "^2.1.0"
   },
   "deprecated": false,
   "description": "A Node-Red Node for collecting `day ahead` prices from Nord Pool Group.",
