@@ -32,5 +32,9 @@
   },
   "bugs": {
     "url": "https://github.com/zinen/node-red-contrib-nordpool-api-plus/issues"
-  }
+  },
+  "files": [
+    "nordpool-api-plus.html",
+    "examples/"
+  ]
 }
