@@ -2,7 +2,7 @@
 
 [![Platform](https://img.shields.io/badge/platform-Node--RED-red)](https://nodered.org)
 [![NPM Total Downloads](https://img.shields.io/npm/dt/node-red-contrib-nordpool-api-plus.svg)](https://www.npmjs.com/package/node-red-contrib-nordpool-api-plus)
-[![Dependencies](https://img.shields.io/david/zinen/node-red-contrib-nordpool-api-plus.svg)](https://github.com/zinen/node-red-contrib-nordpool-api-plus)
+[![Dependencies](https://david-dm.org/zinen/node-red-contrib-nordpool-api-plus.svg)](https://david-dm.org/zinen/node-red-contrib-nordpool-api-plus)
 
 A Node-Red Node for collecting "day ahead" prices from Nord Pool Group.
 
