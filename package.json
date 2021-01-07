@@ -4,8 +4,7 @@
   },
   "bundleDependencies": false,
   "dependencies": {
-    "moment-timezone": "^0.5.32",
-    "nordpool": "^2.1.0"
+    "nordpool": "^3.0.0"
   },
   "deprecated": false,
   "description": "A Node-Red Node for collecting `day ahead` prices from Nord Pool Group.",
@@ -25,7 +24,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "4.1.4",
+  "version": "4.2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/zinen/node-red-contrib-nordpool-api-plus"
