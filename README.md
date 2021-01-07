@@ -6,7 +6,7 @@
 
 A Node-Red Node for collecting "day ahead" prices from Nord Pool Group.
 
-*This is a fork of the original node-red-contrib-nordpool-api, with source code on github to make pull request possible and issue handling*
+*This is a fork of the original node-red-contrib-nordpool-api, but with source code on github to make pull request possible and issue handling. Later that year: the original code is now [uploaded here](https://github.com/Csstenersen/node-red-contrib-nordpool-api)*
 
 ## Installation
 Go to your Node-RED user folder (e.g. ~/.node-red) and run:
@@ -22,23 +22,23 @@ The area and currency can be changed by selecting from the drop down menu in the
 
 ![](/img/example.png)
 
-### example:
+### Examples:
 Use a inject node to trigger a request to nordpool, to get prices for today.
 
-Its also possible to inject a `msg.date` to get price from a specific date, or pricing for tomorrow. If you request tomorrows data before 14:42 theres risk that data is not available yet and you will get the data from the current date. See [API issue#1](https://github.com/samuelmr/nordpool-node/issues/1#issuecomment-316583765)
+Its also possible to inject a `msg.date` to get price from a specific date, or pricing for tomorrow. If you request tomorrows data before 14:42 there's a risk that data is not available yet and you will get the data from the current date. See [API issue#1](https://github.com/samuelmr/nordpool-node/issues/1#issuecomment-316583765)
 
-An 24 object long array is returned on success. The objects contains this properties: `timestamp`, `price` and `currency`.
+An 24 object long array is returned on success. The objects contains this properties: `timestamp`, `price`, `currency` and `area`.
 
 ![](/img/example3.png)
 
-### Example with dashboard chart:
+## Example with dashboard chart:
 In Node-RED editor, click menu at top right corner -> Import -> Examples -> node-red-contrib-nordpool-api-plus -> basic-dashboard.
 
-Use a function node to convert `msg` to values readable for dashboard chart node:
+Use a function node to convert `msg` to values readable for dashboard chart node like this:
 
 ![](/img/example5.png)
 
-the function node in this example contains:
+The function node in this example contains:
 
 ````
 var msg1 = {}
@@ -52,6 +52,6 @@ for (var i = 0; i<msg.payload.length;i++){
 }
 ````
 
-result in dashboard chart:
+This could be the displayed result in:
 
 ![](/img/example6.png)
