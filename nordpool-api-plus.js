@@ -61,7 +61,7 @@ module.exports = function (RED) {
         msg.payload.push(values)
       }
       send(msg)
-      node.status({ fill: '', text: 'Done' })
+      node.status({ text: 'Done' })
       done()
     })
   }
