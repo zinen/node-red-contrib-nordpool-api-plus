@@ -8,7 +8,7 @@ module.exports = function (RED) {
     const node = this
     const nordpool = require('nordpool')
     this.status({ text: 'Ready' })
-    node.on('input', async function (msg, send, done) {
+    node.on('input', async function (msg) {
       this.status({ fill: 'blue', shape: 'dot', text: 'Getting prices' })
       const AREA = msg.area || node.area || 'Oslo'
       const CURRENCY = msg.currency || node.currency || 'EUR'
@@ -18,7 +18,7 @@ module.exports = function (RED) {
           date = new Date(msg.date).toISOString()
         } catch (error) {
           node.status({ fill: 'red', text: 'Error in date input' })
-          done(error)
+          node.done(error)
           return
         }
       } else {
@@ -35,7 +35,7 @@ module.exports = function (RED) {
         results = await prices.hourly(opts)
       } catch (error) {
         node.status({ fill: 'red', text: 'Error getting data' })
-        done(error)
+        node.done(error)
       }
       // Check if data is received from API call
       if (results.length === 0) {
@@ -46,8 +46,8 @@ module.exports = function (RED) {
           node.status({ fill: 'yellow', text: 'No data found for the requested date' })
         }
         msg.payload = null
-        send(msg)
-        done()
+        node.send(msg)
+        node.done()
         return
       }
       msg.payload = []
@@ -60,9 +60,9 @@ module.exports = function (RED) {
         }
         msg.payload.push(values)
       }
-      send(msg)
+      node.send(msg)
       node.status({ text: 'Done' })
-      done()
+      node.done()
     })
   }
   RED.nodes.registerType('nordpool-api-plus', nordpoolAPIPlus)
