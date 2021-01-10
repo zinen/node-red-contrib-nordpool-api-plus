@@ -1,22 +1,36 @@
-name: NPM Publish
+name: npm test and publish
 
-# Controls when the action will run. Triggers the workflow on push
-# events but only for the master branch
 on:
+  # Run on push to the main branch
   push:
     branches: [ main ]
+  # Run only test part for PRs.
+  pull_request:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: npm ci
+      - run: npm test --if-present
+
   publish:
+    needs: build
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    # Only publish on push
+    if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
-          node-version: 10
-      - run: npm install
-      - uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
