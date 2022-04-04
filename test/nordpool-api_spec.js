@@ -46,7 +46,7 @@ describe('nordpool-api-plus Node', function () {
       })
       n1.receive({ payload: '' })
     })
-  })
+  }).timeout(5000)
   it('should have non-default settings', function (done) {
     const flow = [
       { id: 'n1', type: 'nordpool-api-plus', area: 'DK2', currency: 'DKK', wires: [['n2']] },
@@ -62,7 +62,7 @@ describe('nordpool-api-plus Node', function () {
       })
       n1.receive({ payload: '' })
     })
-  })
+  }).timeout(5000)
   it('should receive settings from other node', function (done) {
     const flow = [
       { id: 'n1', type: 'nordpool-api-plus', wires: [['n2']] },
@@ -78,5 +78,5 @@ describe('nordpool-api-plus Node', function () {
       })
       n1.receive({ payload: '', area: 'SE1', currency: 'SEK' })
     })
-  })
+  }).timeout(5000)
 })
