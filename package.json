@@ -31,9 +31,13 @@
     "test": "mocha \"test/**/*_spec.js\""
   },
   "node-red": {
+    "version": ">=1.0.0",
     "nodes": {
       "nordpool-api": "nordpool-api-plus.js"
     }
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "engines": {
+    "node": ">=12.0.0"
+  }
 }
