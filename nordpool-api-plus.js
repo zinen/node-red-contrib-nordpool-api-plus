@@ -38,7 +38,7 @@ module.exports = function (RED) {
         done(error)
       }
       // Check if data is received from API call
-      if (results.length === 0) {
+      if (!results || results.length === 0) {
         // It seems that all areas support EUR, but not other currencies
         if (opts.currency !== 'EUR') {
           node.status({ fill: 'yellow', text: 'No data at date. Some areas only support EUR as currency' })
