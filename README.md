@@ -4,7 +4,8 @@
 [![NPM Total Downloads](https://img.shields.io/npm/dt/node-red-contrib-nordpool-api-plus.svg)](https://www.npmjs.com/package/node-red-contrib-nordpool-api-plus)
 [![Dependencies](https://img.shields.io/librariesio/release/npm/node-red-contrib-nordpool-api-plus.svg)](https://libraries.io/github/zinen/node-red-contrib-nordpool-api-plus)
 
-A Node-Red Node for collecting "day ahead" prices from Nord Pool Group.
+A Node-Red Node for collecting "day ahead" prices from Nord Pool Group.  
+Hourly and daily prices are retrieved.
 
 *This is a fork of the original node-red-contrib-nordpool-api, but with source code on github to make pull request possible and issue handling. Later that year: the original code is now [uploaded here](https://github.com/Csstenersen/node-red-contrib-nordpool-api)*
 
@@ -27,7 +28,12 @@ Use a inject node to trigger a request to nordpool, to get prices for today.
 
 Its also possible to inject a `msg.date` to get price from a specific date, or pricing for tomorrow. If you request tomorrows data before 14:42 there's a risk that data is not available yet and you will get the data from the current date. See [API issue#1](https://github.com/samuelmr/nordpool-node/issues/1#issuecomment-316583765)
 
-An 24 object long array is returned on success. The objects contains this properties: `timestamp`, `price`, `currency` and `area`.
+Hourly and daily prices are returned on separate outputs.
+
+Hourly prices are returned in a 24 object long array on success.  
+Daily prices are returned in an array 31 objects long (i.e. roughly for the past month).
+
+Objects for hourly and daily prices have the same properties: `timestamp`, `price`, `currency` and `area`.  
 
 ![](/img/example3.png)
 
