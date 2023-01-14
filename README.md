@@ -22,16 +22,26 @@ The area and currency can be changed by selecting from the drop down menu in the
 
 ![](/img/example.png)
 
-### Examples:
+## Examples:
 Use a inject node to trigger a request to nordpool, to get prices for today.
 
-Its also possible to inject a `msg.date` to get price from a specific date, or pricing for tomorrow. If you request tomorrows data before 14:42 there's a risk that data is not available yet and you will get the data from the current date. See [API issue#1](https://github.com/samuelmr/nordpool-node/issues/1#issuecomment-316583765)
+Its also possible to inject a `msg.date` to get price from a specific date, or pricing for tomorrow. `msg.date` accepts any value parsable with javascript `new date()`. If you request tomorrows data before 14:42 there's a risk that data is not available yet and you will get the data from the current date. See [API issue#1](https://github.com/samuelmr/nordpool-node/issues/1#issuecomment-316583765)
 
 An 24 object long array is returned on success. The objects contains this properties: `timestamp`, `price`, `currency` and `area`.
 
 ![](/img/example3.png)
 
-## Example with dashboard chart:
+### Example get price of tomorrow:
+
+Setup an inject node info a function node and then this node.
+Added this to the function node to get date of today and add 1 to it.
+```
+msg.date = new Date()
+msg.date = msg.date.setDate(msg.date.getDate() + 1)
+return msg;
+```
+
+### Example with dashboard chart:
 In Node-RED editor, click menu at top right corner -> Import -> Examples -> node-red-contrib-nordpool-api-plus -> basic-dashboard.
 
 Use a function node to convert `msg` to values readable for dashboard chart node like this:
@@ -40,8 +50,8 @@ Use a function node to convert `msg` to values readable for dashboard chart node
 
 The function node in this example contains:
 
-````
-var msg1 = {}
+```js
+let msg1 = {}
 for (var i = 0; i<msg.payload.length;i++){
     msg1 = {
         topic:msg.payload[i].currency, 
@@ -50,8 +60,21 @@ for (var i = 0; i<msg.payload.length;i++){
     }
     node.send(msg1)
 }
-````
+```
 
 This could be the displayed result in:
 
 ![](/img/example6.png)
+
+
+
+### Example modify returned:
+Send returned data into a function node with this content
+
+```js
+for (let i of msg.payload) {
+    i.timestamp = new Date(i.timestamp).toLocaleTimeString('DE') // Use DE format of time
+    i.price = (i.price / 1000 * 1.25).toFixed(2) // Convert from MWh to kWh and add 20% tax
+    node.send({ payload: { price: i.price, timestamp: i.timestamp } })
+}
+```

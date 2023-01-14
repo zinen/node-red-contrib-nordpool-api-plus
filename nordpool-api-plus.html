@@ -5,7 +5,8 @@
         defaults: {
             name: {value:""},
             area: {value:"Oslo"},
-            currency: {Value:"EUR"},
+            currency: {value:"EUR"},
+            action: {value: "todayOrOverride"}
         },
         inputs:1,
         outputs:1,
@@ -57,7 +58,18 @@
             <option value="SEK">SEK</option>
         </select>
     </div>
-    <div class="form-tips"><p>Find your area code at <a href="https://www.nordpoolgroup.com/" target="_blank">www.nordpoolgroup.com</a></p></div>
+    <div class="form-row">
+        <div class="form-tips">
+            <p>Find your area code at <a href="https://www.nordpoolgroup.com/" target="_blank">www.nordpoolgroup.com</a></p>
+        </div>
+    </div>
+    <div class="form-row">
+        <label for="node-input-action"><i class=""></i> Action on input</label>
+        <select value="" id="node-input-action">
+            <option value="todayOrOverride">Todays price. Override with msg.date</option>
+            <option value="dayAhead">Get price for tomorrow(notice limit in help menu)</option>
+        </select>
+    </div>
 </script>
 
 <script type="text/html" data-help-name="nordpool-api-plus">
@@ -82,7 +94,8 @@
             <span class="property-type">date</span>
         </dt>
         <dd>
-            If not defined in input todays date will be used.  If you request tomorrows data before 14:42 theres risk that data is not available yet and you will get the data from the current date. See <a href="https://github.com/samuelmr/nordpool-node/issues/1#issuecomment-316583765" target="_blank">API issue#1</a>.
+            Accepts any value parsable with javascript <code>new date()</code>.
+            <p>If not defined in input todays date will be used. If you request tomorrows data before 14:42 theres risk that data is not available yet and you will get the data from the current date. See <a href="https://github.com/samuelmr/nordpool-node/issues/1#issuecomment-316583765" target="_blank">API issue#1</a>.</p>
         </dd>
     </dl>
     <h3>Output</h3>

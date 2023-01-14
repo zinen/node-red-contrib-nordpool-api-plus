@@ -2,40 +2,45 @@ module.exports = function (RED) {
   function nordpoolAPIPlus (config) {
     RED.nodes.createNode(this, config)
     // The nodes config:
-    this.area = config.area
-    this.currency = config.currency
-    this.date = config.date
     const node = this
+    node.area = config.area
+    node.currency = config.currency
+    node.date = config.date
+    node.action = config.action
     const nordpool = require('nordpool')
-    this.status({ text: 'Ready' })
+    node.status({ text: 'Ready' })
     node.on('input', async function (msg, send, done) {
-      node.status({ fill: 'blue', shape: 'dot', text: 'Getting prices' })
       const AREA = msg.area || node.area || 'Oslo'
       const CURRENCY = msg.currency || node.currency || 'EUR'
-      let date
-      if (msg.date) {
-        try {
-          date = new Date(msg.date).toISOString()
-        } catch (error) {
-          node.status({ fill: 'red', text: 'Error in date input' })
-          done(error)
-          return
-        }
+      let date = new Date()
+      if (node.action == "dayAhead") {
+        date = new Date(date.setDate(date.getDate() + 1)).toISOString()
       } else {
-        date = new Date().toISOString()
+        if (msg.date) {
+          try {
+            date = new Date(msg.date).toISOString()
+          } catch (error) {
+            node.status({ fill: 'red', text: 'Error in date input' })
+            done('Invalid time value input in msg.date')
+            return
+          }
+        } else {
+          date = date.toISOString()
+        }
       }
       const opts = {
         area: AREA, // See https://www.nordpoolgroup.com/Market-data1/#/nordic/map
         currency: CURRENCY, // can also be 'DKK', 'NOK', 'SEK'
         date: date
       }
+      node.status({ fill: 'blue', shape: 'dot', text: 'Getting prices' })
       const prices = new nordpool.Prices()
       let results
       try {
         results = await prices.hourly(opts)
       } catch (error) {
         node.status({ fill: 'red', text: 'Error getting data' })
-        done(error)
+        done(error.message)
       }
       // Check if data is received from API call
       if (!results || results.length === 0) {
@@ -46,15 +51,15 @@ module.exports = function (RED) {
           node.status({ fill: 'yellow', text: 'No data found for the requested date' })
         }
         msg.payload = null
-        send(msg)
+        send(msg.message)
         done()
         return
       }
       msg.payload = []
-      for (var i = 0; i < results.length; i++) {
+      for (let item of results) {
         const values = {
-          timestamp: results[i].date,
-          price: results[i].value,
+          timestamp: item.date,
+          price: item.value,
           currency: opts.currency,
           area: AREA
         }
