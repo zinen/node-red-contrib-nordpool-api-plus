@@ -3,10 +3,13 @@
 [![Platform](https://img.shields.io/badge/platform-Node--RED-red)](https://nodered.org)
 [![NPM Total Downloads](https://img.shields.io/npm/dt/node-red-contrib-nordpool-api-plus.svg)](https://www.npmjs.com/package/node-red-contrib-nordpool-api-plus)
 [![Dependencies](https://img.shields.io/librariesio/release/npm/node-red-contrib-nordpool-api-plus.svg)](https://libraries.io/github/zinen/node-red-contrib-nordpool-api-plus)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-A Node-Red Node for collecting "day ahead" prices from Nord Pool Group.
+A Node-Red Node for collecting "day ahead" prices from Nord Pool Group. For with more features and auto test of codebase.
 
-*This is a fork of the original node-red-contrib-nordpool-api, but with source code on github to make pull request possible and issue handling. Later that year: the original code is now [uploaded here](https://github.com/Csstenersen/node-red-contrib-nordpool-api)*
+*This is a fork of the original node-red-contrib-nordpool-api, but with source code on github to make pull request possible and issue handling....*
+
+*..Later that year: the original code is now [uploaded here](https://github.com/Csstenersen/node-red-contrib-nordpool-api)*
 
 ## Installation
 Go to your Node-RED user folder (e.g. ~/.node-red) and run:
