@@ -44,9 +44,16 @@ module.exports = function (RED) {
         done();
       }
 
-      if (node.action == "allAvailable") {
-        opts.date = new Date(date.setDate(date.getDate() + 1)).toISOString();
+      if (node.action == "rolling") {
+        opts.date = new Date(date.setDate(date.getDate() - 1)).toISOString();
+        try {
+          msg.payload = (await prices(node, npprices, opts)).concat(msg.payload);
+        } catch (error) {
+          send(error.message);
+          done();
+        }
 
+        opts.date = new Date(date.setDate(date.getDate() + 2)).toISOString();
         try {
           msg.payload = msg.payload.concat(
             await prices(node, npprices, opts)
