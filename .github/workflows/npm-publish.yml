@@ -32,5 +32,12 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm publish
+        id: publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - if: steps.publish.outputs.type != 'none'
+        name: Update Node-Red flow-library
+        uses: BigThunderSR/update-package-node-red-flow-library-action@v1.1.2
+        continue-on-error: true
+        with:
+          package-name: 'node-red-contrib-nordpool-api-plus'
