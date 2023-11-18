@@ -28,7 +28,8 @@
   },
   "scripts": {
     "pretest": "npm install node-red-node-test-helper node-red mocha --no-save",
-    "test": "mocha \"test/**/*_spec.js\""
+    "test": "standard && mocha \"test/**/*_spec.js\"",
+    "lint": "standard --fix"
   },
   "node-red": {
     "version": ">=1.0.0",
@@ -36,7 +37,9 @@
       "nordpool-api": "nordpool-api-plus.js"
     }
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "standard": "*"
+  },
   "engines": {
     "node": ">=12.0.0"
   }
