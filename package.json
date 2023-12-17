@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-nordpool-api-plus",
-  "version": "4.5.0",
+  "version": "4.5.1",
   "description": "A Node-Red Node for collecting `day ahead` prices from Nord Pool Group.",
   "keywords": [
     "node-red",

@@ -3,7 +3,7 @@ module.exports = function (RED) {
     RED.nodes.createNode(this, config)
 
     const nordpool = require('nordpool')
-    const npprices = new nordpool.Prices()
+    const nordpoolPrices = new nordpool.Prices()
 
     // The nodes config:
     const node = this
@@ -11,9 +11,7 @@ module.exports = function (RED) {
     node.currency = config.currency
     node.date = config.date
     node.action = config.action
-
     node.status({ text: 'Ready' })
-
     node.on('input', async function (msg, send, done) {
       const opts = {
         area: msg.area || node.area || 'Oslo', // See https://www.nordpoolgroup.com/Market-data1/#/nordic/map
@@ -25,44 +23,38 @@ module.exports = function (RED) {
         date = new Date(date.setDate(date.getDate() + 1))
       } else if (msg.date) {
         try {
-          date = new Date(msg.date).toISOString()
+          date = new Date(msg.date)
         } catch (error) {
           node.status({ fill: 'red', text: 'Error in date input' })
           done('Invalid time value input in msg.date')
           return
         }
       }
-
       opts.date = date.toISOString()
-
       msg.payload = []
-
       try {
-        msg.payload = await prices(node, npprices, opts)
+        msg.payload = await prices(node, nordpoolPrices, opts)
       } catch (error) {
         send(error.message)
         done()
       }
-
       if (node.action === 'rolling') {
         opts.date = new Date(date.setDate(date.getDate() - 1)).toISOString()
         try {
-          msg.payload = (await prices(node, npprices, opts)).concat(msg.payload)
+          msg.payload = (await prices(node, nordpoolPrices, opts)).concat(msg.payload)
         } catch (error) {
           send(error.message)
           done()
         }
-
         opts.date = new Date(date.setDate(date.getDate() + 2)).toISOString()
         try {
           msg.payload = msg.payload.concat(
-            await prices(node, npprices, opts)
+            await prices(node, nordpoolPrices, opts)
           )
         } catch {
           // ignore for tomorrow
         }
       }
-
       send(msg)
       done()
     })
@@ -71,17 +63,15 @@ module.exports = function (RED) {
   RED.nodes.registerType('nordpool-api-plus', nordpoolAPIPlus)
 }
 
-async function prices (node, npprices, opts) {
+async function prices (node, nordpoolPrices, opts) {
   node.status({ fill: 'blue', shape: 'dot', text: 'Getting prices' })
-
   let results
   try {
-    results = await npprices.hourly(opts)
+    results = await nordpoolPrices.hourly(opts)
   } catch (error) {
     node.status({ fill: 'red', text: 'Error getting data' })
     throw error
   }
-
   // Check if data is received from API call
   if (!results || results.length === 0) {
     // It seems that all areas support EUR, but not other currencies
@@ -90,10 +80,8 @@ async function prices (node, npprices, opts) {
     } else {
       node.status({ fill: 'yellow', text: 'No data found for ' + opts.date })
     }
-
     throw new Error('No data found for ' + opts.date)
   }
-
   const items = []
   for (const item of results) {
     items.push({
@@ -103,7 +91,6 @@ async function prices (node, npprices, opts) {
       area: opts.area
     })
   }
-
   node.status({ fill: 'green', text: opts.date + ' OK' })
   return items
 }
