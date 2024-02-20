@@ -81,4 +81,17 @@ describe('nordpool-api-plus Node', function () {
       n1.receive({ payload: '', area: 'SE1', currency: 'SEK', date: yesterdayDate.toISOString() })
     })
   }).timeout(10000)
+  it('should throw catchable error', function (done) {
+    const flow = [
+      { id: 'n1', type: 'nordpool-api-plus', action: 'dayAhead', wires: [['n2']] }
+    ]
+    helper.load(testNode, flow, function () {
+      const n1 = helper.getNode('n1')
+      n1.on('call:error', function (msg) {
+        msg.firstArg.should.startWith('No data found')
+        done()
+      })
+      n1.receive({ area: 'unknown-country' })
+    })
+  }).timeout(10000)
 })

@@ -35,16 +35,16 @@ module.exports = function (RED) {
       try {
         msg.payload = await prices(node, nordpoolPrices, opts)
       } catch (error) {
-        send(error.message)
-        done()
+        done(error.message)
+        return
       }
       if (node.action === 'rolling') {
         opts.date = new Date(date.setDate(date.getDate() - 1)).toISOString()
         try {
           msg.payload = (await prices(node, nordpoolPrices, opts)).concat(msg.payload)
         } catch (error) {
-          send(error.message)
-          done()
+          done(error.message)
+          return
         }
         opts.date = new Date(date.setDate(date.getDate() + 2)).toISOString()
         try {
