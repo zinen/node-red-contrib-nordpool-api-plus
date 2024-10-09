@@ -36,13 +36,16 @@ module.exports = function (RED) {
       msg.payload = []
       try {
         msg.url = 'https://dataportal-api.nordpoolgroup.com/api/DayAheadPrices?market=DayAhead&deliveryArea=' + opts.area + '&currency=' + opts.currency + '&date=' + opts.date
-        let returnedData = await fetch(msg.url)
-        returnedData = await returnedData.text()
+        const response = await fetch(msg.url)
+        let returnedData = await response.text()
+        
         try {
           returnedData = JSON.parse(returnedData)
         } catch (error) {
-          console.log('returnedData JSON parse error content', returnedData)
-          done(returnedData)
+          // console.log('returnedData JSON parse error content', returnedData)
+          console.error(`Error, returnedData JSON parse error content: ${response.status} - ${response.statusText}`)
+          console.error(`msg.url, returnedData JSON parse error content: ${msg.url}`)
+          done(returnedData || 'Empty return of fetch')
           return
         }
         const area = Object.keys(returnedData.multiAreaEntries[0].entryPerArea)[0]
