@@ -57,12 +57,13 @@ module.exports = function (RED) {
       //   }))
         // msg.payload = await prices(node, nordpoolPrices, opts)
       } catch (error) {
-        // console.log('Error ' + String(error))
-        // console.log('Error opts ' + JSON.stringify(opts))
+        console.log('Error ' + String(error))
+        console.log('Error opts ' + JSON.stringify(opts))
         done(error.message)
         return
       }
       if (node.action === 'rolling') {
+        date = new Date()
         date = new Date(date.setDate(date.getDate() - 1)).toISOString()
         opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
 
@@ -72,6 +73,7 @@ module.exports = function (RED) {
           done(error.message)
           return
         }
+        date = new Date()
         date = new Date(date.setDate(date.getDate() + 2)).toISOString()
         opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
         try {
