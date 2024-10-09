@@ -113,30 +113,25 @@ describe('nordpool-api-plus Node', function () {
       const n1 = helper.getNode('n1')
       const n2 = helper.getNode('n2')
       n2.on('input', function (msg) {
-        let errorHappend = false
-        console.log('debug: should return data from yesterday also')
-        console.log(msg)
+        let errorHappened = false
+        // console.log('debug: should return data from yesterday also')
+        // console.log(msg)
         try {
           msg.should.have.property('payload').which.is.a.Array()
-          msg.payload.should.be.greaterThan(47)
+          msg.payload.length.should.be.greaterThan(47)
           msg.payload[47].should.property('price').which.is.a.Number()
           msg.payload[47].should.property('currency').which.is.a.String()
           msg.payload[47].should.property('area').which.is.a.String()
           // Test if date can be parsed
           msg.payload[47].should.property('timestamp')
-          const dateParsing = new Date(msg.payload[47].timestamp)
+          const dateParsing = new Date(msg.payload[46].timestamp)
           should.notEqual(dateParsing, 'Invalid Date')
         } catch (error) {
+          console.error(String(error))
           console.trace(error)
-          errorHappend = true
+          errorHappened = true
         }
-        if (!errorHappend) done()
-      })
-      n1.on('call:error', function (msg) {
-        console.log('error: should return data from yesterday also')
-        console.log(msg)
-        // msg.firstArg.should.startWith('204')
-        // done()
+        if (!errorHappened) done()
       })
       n1.receive({ payload: '' })
     })
