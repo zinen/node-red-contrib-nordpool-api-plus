@@ -54,7 +54,8 @@ module.exports = function (RED) {
       if (node.action === 'rolling') {
         opts.date = new Date(date.setDate(date.getDate() - 1)).toISOString()
         try {
-          msg.payload = (await prices(node, nordpoolPrices, opts)).concat(msg.payload)
+          done('Nordpool data not yet fixed for action=rolling')
+          // msg.payload = (await prices(node, nordpoolPrices, opts)).concat(msg.payload)
         } catch (error) {
           done(error.message)
           return
