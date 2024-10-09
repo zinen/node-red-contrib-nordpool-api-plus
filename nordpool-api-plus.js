@@ -58,7 +58,7 @@ module.exports = function (RED) {
         // msg.payload = await prices(node, nordpoolPrices, opts)
       } catch (error) {
         console.log('Error ' + String(error))
-        console.log('Error opts '+ JSON.stringify(opts))
+        console.log('Error opts ' + JSON.stringify(opts))
         done(error.message)
         return
       }
