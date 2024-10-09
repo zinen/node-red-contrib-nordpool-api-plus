@@ -27,6 +27,9 @@ jobs:
         with:
           name: npm-error-log
           path: /home/runner/.npm/_logs/*.log  # Specify the path to the npm logs
+      - name: Fail the job if tests failed
+        if: failure()  # Run this step only if a previous step failed
+        run: exit 1  # Explicitly exit with an error code to fail the job
 
   publish:
     needs: build
