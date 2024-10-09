@@ -3,7 +3,7 @@ module.exports = function (RED) {
     RED.nodes.createNode(this, config)
 
     const nordpool = require('nordpool')
-    const nordpoolPrices = new nordpool.Prices()
+    // const nordpoolPrices = new nordpool.Prices()
     const fetch = require('node-fetch')
 
     // The nodes config:
@@ -33,7 +33,7 @@ module.exports = function (RED) {
       // Format date to YYYY-MM-DD
       opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
       try {
-        msg.payload = await prices(node, opts)
+        msg.payload = await prices(node, fetch, opts)
 
       // try {
       //   msg.url = 'https://dataportal-api.nordpoolgroup.com/api/DayAheadPrices?market=DayAhead&deliveryArea=' + opts.area + '&currency=' + opts.currency + '&date=' + opts.date
@@ -65,7 +65,7 @@ module.exports = function (RED) {
         opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
 
         try {
-          msg.payload = (await prices(node, opts)).concat(msg.payload)
+          msg.payload = (await prices(node, fetch, opts)).concat(msg.payload)
         } catch (error) {
           done(error.message)
           return
@@ -74,7 +74,7 @@ module.exports = function (RED) {
         opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
         try {
           msg.payload = msg.payload.concat(
-            await prices(node, opts)
+            await prices(node, fetch, opts)
           )
         } catch {
           // ignore for tomorrow
@@ -120,9 +120,9 @@ module.exports = function (RED) {
 //   return items
 // }
 
-async function prices (node, opts) {
+async function prices (node, fetch, opts) {
   node.status({ fill: 'blue', shape: 'dot', text: 'Getting prices' })
-  items = []
+  const items = []
   try {
     const url = 'https://dataportal-api.nordpoolgroup.com/api/DayAheadPrices?market=DayAhead&deliveryArea=' + opts.area + '&currency=' + opts.currency + '&date=' + opts.date
     const response = await fetch(url)
