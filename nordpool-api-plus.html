@@ -4,7 +4,7 @@
         color: '#a6bbcf',
         defaults: {
             name: {value:""},
-            area: {value:"Oslo"},
+            area: {value:"NO1"},
             currency: {value:"EUR"},
             action: {value: "todayOrOverride"}
         },
@@ -33,20 +33,21 @@
             <option value="FI">FI</option>
             <option value="DK1">DK1</option>
             <option value="DK2">DK2</option>
-            <option value="Oslo">Oslo</option>
-            <option value="Kr.sand">Kr.sand</option>
-            <option value="Bergen">Bergen</option>
-            <option value="Molde">Molde</option>
-            <option value="Tr.heim">Tr.heim</option>
-            <option value="Tromsø">Tromsø</option>
+            <option value="NO1">NO1</option>
+            <option value="NO2">NO2</option>
+            <option value="NO3">NO3</option>
+            <option value="NO4">NO4</option>
+            <option value="NO5">NO5</option>
             <option value="EE">EE</option>
             <option value="LV">LV</option>
             <option value="LT">LT</option>
             <option value="AT">AT</option>
             <option value="BE">BE</option>
-            <option value="DE-LU">DE-LU</option>
+            <option value="DE">DE-LU</option>
             <option value="FR">FR</option>
             <option value="NL">NL</option>
+            <option value="NL">PL</option>
+            <option value="NL">AT</option>
         </select>
     </div>
     <div class="form-row">
@@ -55,12 +56,13 @@
             <option value="EUR">EUR</option>
             <option value="DKK">DKK</option>
             <option value="NOK">NOK</option>
+            <option value="NOK">PLN</option>
             <option value="SEK">SEK</option>
         </select>
     </div>
     <div class="form-row">
         <div class="form-tips">
-            <p>Find your area code at <a href="https://www.nordpoolgroup.com/" target="_blank">www.nordpoolgroup.com</a></p>
+            <p>Find your area code at <a href="https://data.nordpoolgroup.com/map" target="_blank">nordpoolgroup.com/map</a></p>
         </div>
     </div>
     <div class="form-row">
@@ -81,7 +83,7 @@
             <span class="property-type">String</span>
         </dt>
         <dd>
-            If set in msg, will accept the area as a string, else the node's settings is used. Possible areas can be found at <a href="https://www.nordpoolgroup.com/Market-data1/#/nordic/map" target="_blank">nordpoolgroup map</a>
+            If set in msg, will accept the area as a string, else the node's settings is used. Possible areas can be found at <a href="https://data.nordpoolgroup.com/map" target="_blank">nordpoolgroup map</a>
             Or the main site <a href="https://www.nordpoolgroup.com/" target="_blank">www.nordpoolgroup.com</a>.
         </dd>
         <dt>currency

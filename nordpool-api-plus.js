@@ -44,7 +44,7 @@ module.exports = function (RED) {
           // console.log('returnedData JSON parse error content', returnedData)
           // console.error(`Error, returnedData JSON parse error content: ${response.status} - ${response.statusText}`)
           console.error(`msg.url, returnedData JSON parse error content: ${msg.url}`)
-          done(returnedData || `Error: ${response.status} - ${response.statusText}`)
+          done(returnedData || `${response.status} - Error: ${response.statusText}`)
           return
         }
         const area = Object.keys(returnedData.multiAreaEntries[0].entryPerArea)[0]
