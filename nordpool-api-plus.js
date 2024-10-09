@@ -4,6 +4,7 @@ module.exports = function (RED) {
 
     const nordpool = require('nordpool')
     const nordpoolPrices = new nordpool.Prices()
+    const fetch = require('node-fetch');
 
     // The nodes config:
     const node = this
@@ -30,10 +31,13 @@ module.exports = function (RED) {
           return
         }
       }
-      opts.date = date.toISOString()
+      // Format date to YYYY-MM-DD
+      opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' +  String(date.getDate()).padStart(2, '0');
       msg.payload = []
       try {
-        msg.payload = await prices(node, nordpoolPrices, opts)
+        msg.url = "https://dataportal-api.nordpoolgroup.com/api/DayAheadPrices?market=DayAhead&deliveryArea=DK1&currency=DKK&date=" + opts.date;
+        msg.payload = await fetch(msg.url)
+        // msg.payload = await prices(node, nordpoolPrices, opts)
       } catch (error) {
         done(error.message)
         return

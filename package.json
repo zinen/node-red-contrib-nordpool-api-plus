@@ -24,7 +24,8 @@
     "url": "https://github.com/zinen/node-red-contrib-nordpool-api-plus"
   },
   "dependencies": {
-    "nordpool": "^3.0.0"
+    "nordpool": "^3.0.0",
+    "node-fetch": "^2.7.0"
   },
   "scripts": {
     "pretest": "npm install node-red-node-test-helper node-red mocha --no-save",
