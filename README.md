@@ -5,7 +5,7 @@
 [![Dependencies](https://img.shields.io/librariesio/release/npm/node-red-contrib-nordpool-api-plus.svg)](https://libraries.io/github/zinen/node-red-contrib-nordpool-api-plus)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-A Node-Red Node for collecting "day ahead" prices from Nord Pool Group. This plus node gives you more features and auto tested of codebase. To be more robost.
+A Node-Red Node for collecting "day ahead" prices from Nord Pool Group. This plus node gives you more features and auto tested of codebase. To be more robust.
 
 *This is a fork of the original node-red-contrib-nordpool-api, but with source code on github to make pull request possible and issue handling....*
 
@@ -84,4 +84,4 @@ for (let i of msg.payload) {
 
 ### Example get current price
 
-[See isssue#27](https://github.com/zinen/node-red-contrib-nordpool-api-plus/issues/27) for diffrent approch to get current price.
+[See issue#27](https://github.com/zinen/node-red-contrib-nordpool-api-plus/issues/27) for different approach to get current price.

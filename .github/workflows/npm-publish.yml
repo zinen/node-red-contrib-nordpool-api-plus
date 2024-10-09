@@ -3,7 +3,8 @@ name: npm test and publish
 on:
   # Run on push to the main branch
   push:
-    branches: [ main ]
+    branches:
+    - '**'  # This will run on all branches
   # Run only test part for PRs.
   pull_request:
 
@@ -11,24 +12,39 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 16
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
       - run: npm ci
+        continue-on-error: true  # Allow the job to continue even if the test fails
+        id: install
+
       - run: npm test --if-present
+        continue-on-error: true  # Allow the job to continue even if the test fails
+        id: test
+        if: success() # Only run this step if a previous step did not fail
+
+      - name: Upload npm logs as artifact if test fails
+        if: failure()  # Only run this step if a previous step has failed
+        uses: actions/upload-artifact@v3
+        with:
+          name: npm-error-log
+          path: /home/runner/.npm/_logs/*.log  # Specify the path to the npm logs
+
+      # Explicitly fail the job if the tests failed
+      - name: Fail the job if tests failed
+        if: steps.install.outcome == 'failure' || steps.test.outcome == 'failure' # Check if the test step failed
+        run: exit 1  # Fail the job by exiting with an error code
 
   publish:
     needs: build
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    # Only publish on push
-    if: github.event_name == 'push'
+    # Only publish on push to main branch
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'  # Only run publish on main branch after a push event
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm publish

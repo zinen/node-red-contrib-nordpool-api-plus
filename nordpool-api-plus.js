@@ -1,20 +1,17 @@
 module.exports = function (RED) {
   function nordpoolAPIPlus (config) {
     RED.nodes.createNode(this, config)
-
-    const nordpool = require('nordpool')
-    const nordpoolPrices = new nordpool.Prices()
+    const fetch = require('node-fetch')
 
     // The nodes config:
     const node = this
     node.area = config.area
     node.currency = config.currency
-    node.date = config.date
     node.action = config.action
     node.status({ text: 'Ready' })
     node.on('input', async function (msg, send, done) {
       const opts = {
-        area: msg.area || node.area || 'Oslo', // See https://www.nordpoolgroup.com/Market-data1/#/nordic/map
+        area: msg.area || node.area || 'NO1', // See https://data.nordpoolgroup.com/map
         currency: msg.currency || node.currency || 'EUR' // can also be 'DKK', 'NOK', 'SEK'
       }
 
@@ -30,26 +27,30 @@ module.exports = function (RED) {
           return
         }
       }
-      opts.date = date.toISOString()
-      msg.payload = []
       try {
-        msg.payload = await prices(node, nordpoolPrices, opts)
+        // Format date to YYYY-MM-DD
+        opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
+        msg.payload = await prices(node, fetch, opts)
       } catch (error) {
         done(error.message)
         return
       }
       if (node.action === 'rolling') {
-        opts.date = new Date(date.setDate(date.getDate() - 1)).toISOString()
+        date = new Date()
+        date = new Date(date.setDate(date.getDate() - 1))
         try {
-          msg.payload = (await prices(node, nordpoolPrices, opts)).concat(msg.payload)
+          opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
+          msg.payload = (await prices(node, fetch, opts)).concat(msg.payload)
         } catch (error) {
           done(error.message)
           return
         }
-        opts.date = new Date(date.setDate(date.getDate() + 2)).toISOString()
+        date = new Date()
+        date = new Date(date.setDate(date.getDate() + 2))
         try {
+          opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
           msg.payload = msg.payload.concat(
-            await prices(node, nordpoolPrices, opts)
+            await prices(node, fetch, opts)
           )
         } catch {
           // ignore for tomorrow
@@ -63,34 +64,35 @@ module.exports = function (RED) {
   RED.nodes.registerType('nordpool-api-plus', nordpoolAPIPlus)
 }
 
-async function prices (node, nordpoolPrices, opts) {
+async function prices (node, fetch, opts) {
   node.status({ fill: 'blue', shape: 'dot', text: 'Getting prices' })
-  let results
+  let response
   try {
-    results = await nordpoolPrices.hourly(opts)
+    const url = 'https://dataportal-api.nordpoolgroup.com/api/DayAheadPrices?market=DayAhead&deliveryArea=' + opts.area + '&currency=' + opts.currency + '&date=' + opts.date
+    response = await fetch(url)
   } catch (error) {
     node.status({ fill: 'red', text: 'Error getting data' })
-    throw error
   }
-  // Check if data is received from API call
-  if (!results || results.length === 0) {
-    // It seems that all areas support EUR, but not other currencies
+  let returnedData = await response.text()
+  try {
+    returnedData = JSON.parse(returnedData)
+  } catch (error) {
+    const errorText = returnedData || `${response.status} - Error: ${response.statusText}`
+    // console.error(`msg.url, returnedData JSON parse error content: ${msg.url}`)
     if (opts.currency !== 'EUR') {
       node.status({ fill: 'yellow', text: 'No data for ' + opts.date + '. Some areas only support EUR as currency' })
     } else {
       node.status({ fill: 'yellow', text: 'No data found for ' + opts.date })
     }
-    throw new Error('No data found for ' + opts.date)
+    throw new Error(errorText)
   }
-  const items = []
-  for (const item of results) {
-    items.push({
-      timestamp: item.date,
-      price: item.value,
-      currency: opts.currency,
-      area: opts.area
-    })
-  }
+  const area = Object.keys(returnedData.multiAreaEntries[0].entryPerArea)[0]
+  const items = returnedData.multiAreaEntries.map(entry => ({
+    price: entry.entryPerArea[area],
+    currency: returnedData.currency,
+    area,
+    timestamp: entry.deliveryStart
+  }))
   node.status({ fill: 'green', text: opts.date + ' OK' })
   return items
 }
