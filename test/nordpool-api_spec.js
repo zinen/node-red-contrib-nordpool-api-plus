@@ -132,6 +132,12 @@ describe('nordpool-api-plus Node', function () {
         }
         if (!errorHappend) done()
       })
+      n1.on('call:error', function (msg) {
+        console.log('error: should return data from yesterday also')
+        console.log(msg)
+        // msg.firstArg.should.startWith('204')
+        // done()
+      })
       n1.receive({ payload: '' })
     })
   }).timeout(10000)
