@@ -135,7 +135,7 @@ async function prices (node, fetch, opts) {
   try {
     returnedData = JSON.parse(returnedData)
   } catch (error) {
-    const errorText = returnedData || `${response.status} - Error: ${response.statusText}`
+    const errorText = returnedData || `${response.status} - ${response.statusText}`
     // console.error(`msg.url, returnedData JSON parse error content: ${msg.url}`)
     if (opts.currency !== 'EUR') {
       node.status({ fill: 'yellow', text: 'No data for ' + opts.date + '. Some areas only support EUR as currency' })
