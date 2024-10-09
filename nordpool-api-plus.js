@@ -30,9 +30,9 @@ module.exports = function (RED) {
           return
         }
       }
-      // Format date to YYYY-MM-DD
-      opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
       try {
+        // Format date to YYYY-MM-DD
+        opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
         msg.payload = await prices(node, fetch, opts)
 
       // try {
@@ -57,26 +57,25 @@ module.exports = function (RED) {
       //   }))
         // msg.payload = await prices(node, nordpoolPrices, opts)
       } catch (error) {
-        console.log('Error ' + String(error))
-        console.log('Error opts ' + JSON.stringify(opts))
+        // console.log('Error ' + String(error))
+        // console.log('Error opts ' + JSON.stringify(opts))
         done(error.message)
         return
       }
       if (node.action === 'rolling') {
         date = new Date()
-        date = new Date(date.setDate(date.getDate() - 1)).toISOString()
-        opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
-
+        date = new Date(date.setDate(date.getDate() - 1))
         try {
+          opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
           msg.payload = (await prices(node, fetch, opts)).concat(msg.payload)
         } catch (error) {
           done(error.message)
           return
         }
         date = new Date()
-        date = new Date(date.setDate(date.getDate() + 2)).toISOString()
-        opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
+        date = new Date(date.setDate(date.getDate() + 2))
         try {
+          opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
           msg.payload = msg.payload.concat(
             await prices(node, fetch, opts)
           )
@@ -84,6 +83,7 @@ module.exports = function (RED) {
           // ignore for tomorrow
         }
       }
+      // console.log('x1' + msg.payload.length)
       send(msg)
       done()
     })
