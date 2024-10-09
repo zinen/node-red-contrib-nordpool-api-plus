@@ -37,8 +37,14 @@ module.exports = function (RED) {
       try {
         msg.url = 'https://dataportal-api.nordpoolgroup.com/api/DayAheadPrices?market=DayAhead&deliveryArea=' + opts.area + '&currency=' + opts.currency + '&date=' + opts.date
         let returnedData = await fetch(msg.url)
-        returnedData = await returnedData.json()
-        console.log('returnedData', returnedData)
+        returnedData = await returnedData.text()
+        try {
+          returnedData = JSON.parse(returnedData)
+        } catch (error) {
+          console.log('returnedData JSON parse error content', returnedData)
+          done(returnedData)
+          return
+        }
         const area = Object.keys(returnedData.multiAreaEntries[0].entryPerArea)[0]
         msg.payload = returnedData.multiAreaEntries.map(entry => ({
           price: entry.entryPerArea[area],

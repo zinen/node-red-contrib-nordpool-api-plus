@@ -34,6 +34,8 @@ describe('nordpool-api-plus Node', function () {
       const n2 = helper.getNode('n2')
       n2.on('input', function (msg) {
         let errorHappend = false
+        console.log('debug: should be able to receive data')
+        console.log(msg)
         try {
           msg.should.have.property('payload').which.is.a.Array()
           msg.payload.should.have.length(24)
