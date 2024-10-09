@@ -88,37 +88,37 @@ module.exports = function (RED) {
   RED.nodes.registerType('nordpool-api-plus', nordpoolAPIPlus)
 }
 
-async function prices (node, nordpoolPrices, opts) {
-  node.status({ fill: 'blue', shape: 'dot', text: 'Getting prices' })
-  let results
-  try {
-    results = await nordpoolPrices.hourly(opts)
-  } catch (error) {
-    node.status({ fill: 'red', text: 'Error getting data' })
-    throw error
-  }
-  // Check if data is received from API call
-  if (!results || results.length === 0) {
-    // It seems that all areas support EUR, but not other currencies
-    if (opts.currency !== 'EUR') {
-      node.status({ fill: 'yellow', text: 'No data for ' + opts.date + '. Some areas only support EUR as currency' })
-    } else {
-      node.status({ fill: 'yellow', text: 'No data found for ' + opts.date })
-    }
-    throw new Error('No data found for ' + opts.date)
-  }
-  const items = []
-  for (const item of results) {
-    items.push({
-      timestamp: item.date,
-      price: item.value,
-      currency: opts.currency,
-      area: opts.area
-    })
-  }
-  node.status({ fill: 'green', text: opts.date + ' OK' })
-  return items
-}
+// async function prices (node, nordpoolPrices, opts) {
+//   node.status({ fill: 'blue', shape: 'dot', text: 'Getting prices' })
+//   let results
+//   try {
+//     results = await nordpoolPrices.hourly(opts)
+//   } catch (error) {
+//     node.status({ fill: 'red', text: 'Error getting data' })
+//     throw error
+//   }
+//   // Check if data is received from API call
+//   if (!results || results.length === 0) {
+//     // It seems that all areas support EUR, but not other currencies
+//     if (opts.currency !== 'EUR') {
+//       node.status({ fill: 'yellow', text: 'No data for ' + opts.date + '. Some areas only support EUR as currency' })
+//     } else {
+//       node.status({ fill: 'yellow', text: 'No data found for ' + opts.date })
+//     }
+//     throw new Error('No data found for ' + opts.date)
+//   }
+//   const items = []
+//   for (const item of results) {
+//     items.push({
+//       timestamp: item.date,
+//       price: item.value,
+//       currency: opts.currency,
+//       area: opts.area
+//     })
+//   }
+//   node.status({ fill: 'green', text: opts.date + ' OK' })
+//   return items
+// }
 
 async function prices (node, opts) {
   node.status({ fill: 'blue', shape: 'dot', text: 'Getting prices' })
