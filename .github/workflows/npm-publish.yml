@@ -3,7 +3,8 @@ name: npm test and publish
 on:
   # Run on push to the main branch
   push:
-    branches: [ main ]
+    branches:
+    - '**'  # This will run on all branches
   # Run only test part for PRs.
   pull_request:
 
@@ -13,8 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
-        with:
-          node-version: 16
+        # with:
+          # node-version: 16
       - run: npm ci
       - run: npm test --if-present
 
@@ -22,13 +23,13 @@ jobs:
     needs: build
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    # Only publish on push
-    if: github.event_name == 'push'
+    # Only publish on push to main branch
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'  # Only run publish on main branch after a push event
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
-          node-version: 16
+          # node-version: 16
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm publish
