@@ -12,8 +12,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
         # with:
           # node-version: 16
       - run: npm ci
@@ -38,8 +38,8 @@ jobs:
     # Only publish on push to main branch
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'  # Only run publish on main branch after a push event
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
         with:
           # node-version: 16
           registry-url: https://registry.npmjs.org/
