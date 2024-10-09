@@ -96,12 +96,43 @@ describe('nordpool-api-plus Node', function () {
     helper.load(testNode, flow, function () {
       const n1 = helper.getNode('n1')
       n1.on('call:error', function (msg) {
-        console.log('debug: should throw catchable error')
-        console.log(msg)
+        // console.log('debug: should throw catchable error')
+        // console.log(msg)
         msg.firstArg.should.startWith('204')
         done()
       })
       n1.receive({ area: 'unknown-country' })
+    })
+  }).timeout(10000)
+  it('should return data from yesterday also', function (done) {
+    const flow = [
+      { id: 'n1', type: 'nordpool-api-plus', action: 'rolling', wires: [['n2']] },
+      { id: 'n2', type: 'helper' }
+    ]
+    helper.load(testNode, flow, function () {
+      const n1 = helper.getNode('n1')
+      const n2 = helper.getNode('n2')
+      n2.on('input', function (msg) {
+        let errorHappend = false
+        console.log('debug: should return data from yesterday also')
+        console.log(msg)
+        try {
+          msg.should.have.property('payload').which.is.a.Array()
+          msg.payload.should.be.greaterThan(47)
+          msg.payload[47].should.property('price').which.is.a.Number()
+          msg.payload[47].should.property('currency').which.is.a.String()
+          msg.payload[47].should.property('area').which.is.a.String()
+          // Test if date can be parsed
+          msg.payload[47].should.property('timestamp')
+          const dateParsing = new Date(msg.payload[47].timestamp)
+          should.notEqual(dateParsing, 'Invalid Date')
+        } catch (error) {
+          console.trace(error)
+          errorHappend = true
+        }
+        if (!errorHappend) done()
+      })
+      n1.receive({ payload: '' })
     })
   }).timeout(10000)
 })
