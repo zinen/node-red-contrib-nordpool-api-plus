@@ -98,7 +98,7 @@ describe('nordpool-api-plus Node', function () {
       n1.on('call:error', function (msg) {
         console.log('debug: should throw catchable error')
         console.log(msg)
-        msg.firstArg.should.startWith('Error 204')
+        msg.firstArg.should.startWith('204')
         done()
       })
       n1.receive({ area: 'unknown-country' })
