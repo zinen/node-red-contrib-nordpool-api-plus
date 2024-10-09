@@ -1,10 +1,10 @@
 module.exports = function (RED) {
-  function nordpoolAPIPlus(config) {
+  function nordpoolAPIPlus (config) {
     RED.nodes.createNode(this, config)
 
     const nordpool = require('nordpool')
     const nordpoolPrices = new nordpool.Prices()
-    const fetch = require('node-fetch');
+    const fetch = require('node-fetch')
 
     // The nodes config:
     const node = this
@@ -35,16 +35,16 @@ module.exports = function (RED) {
       opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
       msg.payload = []
       try {
-        msg.url = "https://dataportal-api.nordpoolgroup.com/api/DayAheadPrices?market=DayAhead&deliveryArea=" + opts.area + "&currency=" + opts.currency + "&date=" + opts.date;
+        msg.url = 'https://dataportal-api.nordpoolgroup.com/api/DayAheadPrices?market=DayAhead&deliveryArea=' + opts.area + '&currency=' + opts.currency + '&date=' + opts.date;
         let returnedData = await fetch(msg.url)
         returnedData = await returnedData.json()
-        console.log("returnedData", returnedData)
+        console.log('returnedData', returnedData)
         const area = Object.keys(returnedData.multiAreaEntries[0].entryPerArea)[0]
         msg.payload = returnedData.multiAreaEntries.map(entry => ({
           price: entry.entryPerArea[area],
           currency: returnedData.currency,
           area,
-          timestamp: entry.deliveryStart,
+          timestamp: entry.deliveryStart
         }))
         // msg.payload = await prices(node, nordpoolPrices, opts)
       } catch (error) {
@@ -76,7 +76,7 @@ module.exports = function (RED) {
   RED.nodes.registerType('nordpool-api-plus', nordpoolAPIPlus)
 }
 
-async function prices(node, nordpoolPrices, opts) {
+async function prices (node, nordpoolPrices, opts) {
   node.status({ fill: 'blue', shape: 'dot', text: 'Getting prices' })
   let results
   try {
