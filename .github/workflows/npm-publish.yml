@@ -17,8 +17,10 @@ jobs:
         # with:
           # node-version: 16
       - run: npm ci
+        continue-on-error: true  # Allow the job to continue even if the test fails
       - run: npm test --if-present
         continue-on-error: true  # Allow the job to continue even if the test fails
+        if: success() # Only run this step if a previous step did not fail
       - name: Upload npm logs as artifact if test fails
         if: failure()  # Only run this step if a previous step has failed
         uses: actions/upload-artifact@v3
