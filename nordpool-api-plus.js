@@ -124,7 +124,7 @@ module.exports = function (RED) {
 
 async function prices (node, fetch, opts) {
   node.status({ fill: 'blue', shape: 'dot', text: 'Getting prices' })
-  let response = undefined
+  let response
   try {
     const url = 'https://dataportal-api.nordpoolgroup.com/api/DayAheadPrices?market=DayAhead&deliveryArea=' + opts.area + '&currency=' + opts.currency + '&date=' + opts.date
     response = await fetch(url)
