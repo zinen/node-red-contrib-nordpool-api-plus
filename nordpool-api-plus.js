@@ -2,7 +2,7 @@ module.exports = function (RED) {
   function nordpoolAPIPlus (config) {
     RED.nodes.createNode(this, config)
 
-    const nordpool = require('nordpool')
+    // const nordpool = require('nordpool')
     // const nordpoolPrices = new nordpool.Prices()
     const fetch = require('node-fetch')
 
@@ -122,7 +122,6 @@ module.exports = function (RED) {
 
 async function prices (node, fetch, opts) {
   node.status({ fill: 'blue', shape: 'dot', text: 'Getting prices' })
-  const items = []
   try {
     const url = 'https://dataportal-api.nordpoolgroup.com/api/DayAheadPrices?market=DayAhead&deliveryArea=' + opts.area + '&currency=' + opts.currency + '&date=' + opts.date
     const response = await fetch(url)
@@ -140,7 +139,7 @@ async function prices (node, fetch, opts) {
       throw errorText
     }
     const area = Object.keys(returnedData.multiAreaEntries[0].entryPerArea)[0]
-    items = returnedData.multiAreaEntries.map(entry => ({
+    const items = returnedData.multiAreaEntries.map(entry => ({
       price: entry.entryPerArea[area],
       currency: returnedData.currency,
       area,
