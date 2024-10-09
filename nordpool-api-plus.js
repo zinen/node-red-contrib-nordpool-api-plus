@@ -10,7 +10,6 @@ module.exports = function (RED) {
     const node = this
     node.area = config.area
     node.currency = config.currency
-    node.date = config.date
     node.action = config.action
     node.status({ text: 'Ready' })
     node.on('input', async function (msg, send, done) {
@@ -33,45 +32,49 @@ module.exports = function (RED) {
       }
       // Format date to YYYY-MM-DD
       opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
-      msg.payload = []
       try {
-        msg.url = 'https://dataportal-api.nordpoolgroup.com/api/DayAheadPrices?market=DayAhead&deliveryArea=' + opts.area + '&currency=' + opts.currency + '&date=' + opts.date
-        const response = await fetch(msg.url)
-        let returnedData = await response.text()
-        try {
-          returnedData = JSON.parse(returnedData)
-        } catch (error) {
-          // console.log('returnedData JSON parse error content', returnedData)
-          // console.error(`Error, returnedData JSON parse error content: ${response.status} - ${response.statusText}`)
-          console.error(`msg.url, returnedData JSON parse error content: ${msg.url}`)
-          done(returnedData || `${response.status} - Error: ${response.statusText}`)
-          return
-        }
-        const area = Object.keys(returnedData.multiAreaEntries[0].entryPerArea)[0]
-        msg.payload = returnedData.multiAreaEntries.map(entry => ({
-          price: entry.entryPerArea[area],
-          currency: returnedData.currency,
-          area,
-          timestamp: entry.deliveryStart
-        }))
+        msg.payload = await prices(node, opts)
+
+      // try {
+      //   msg.url = 'https://dataportal-api.nordpoolgroup.com/api/DayAheadPrices?market=DayAhead&deliveryArea=' + opts.area + '&currency=' + opts.currency + '&date=' + opts.date
+      //   const response = await fetch(msg.url)
+      //   let returnedData = await response.text()
+      //   try {
+      //     returnedData = JSON.parse(returnedData)
+      //   } catch (error) {
+      //     // console.log('returnedData JSON parse error content', returnedData)
+      //     // console.error(`Error, returnedData JSON parse error content: ${response.status} - ${response.statusText}`)
+      //     console.error(`msg.url, returnedData JSON parse error content: ${msg.url}`)
+      //     done(returnedData || `${response.status} - Error: ${response.statusText}`)
+      //     return
+      //   }
+      //   const area = Object.keys(returnedData.multiAreaEntries[0].entryPerArea)[0]
+      //   msg.payload = returnedData.multiAreaEntries.map(entry => ({
+      //     price: entry.entryPerArea[area],
+      //     currency: returnedData.currency,
+      //     area,
+      //     timestamp: entry.deliveryStart
+      //   }))
         // msg.payload = await prices(node, nordpoolPrices, opts)
       } catch (error) {
         done(error.message)
         return
       }
       if (node.action === 'rolling') {
-        opts.date = new Date(date.setDate(date.getDate() - 1)).toISOString()
+        date = new Date(date.setDate(date.getDate() - 1)).toISOString()
+        opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
+
         try {
-          done('Nordpool data not yet fixed for action=rolling')
-          // msg.payload = (await prices(node, nordpoolPrices, opts)).concat(msg.payload)
+          msg.payload = (await prices(node, opts)).concat(msg.payload)
         } catch (error) {
           done(error.message)
           return
         }
-        opts.date = new Date(date.setDate(date.getDate() + 2)).toISOString()
+        date = new Date(date.setDate(date.getDate() + 2)).toISOString()
+        opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
         try {
           msg.payload = msg.payload.concat(
-            await prices(node, nordpoolPrices, opts)
+            await prices(node, opts)
           )
         } catch {
           // ignore for tomorrow
@@ -115,4 +118,36 @@ async function prices (node, nordpoolPrices, opts) {
   }
   node.status({ fill: 'green', text: opts.date + ' OK' })
   return items
+}
+
+async function prices (node, opts) {
+  node.status({ fill: 'blue', shape: 'dot', text: 'Getting prices' })
+  items = []
+  try {
+    const url = 'https://dataportal-api.nordpoolgroup.com/api/DayAheadPrices?market=DayAhead&deliveryArea=' + opts.area + '&currency=' + opts.currency + '&date=' + opts.date
+    const response = await fetch(url)
+    let returnedData = await response.text()
+    try {
+      returnedData = JSON.parse(returnedData)
+    } catch (error) {
+      const errorText = returnedData || `${response.status} - Error: ${response.statusText}`
+      // console.error(`msg.url, returnedData JSON parse error content: ${msg.url}`)
+      if (opts.currency !== 'EUR') {
+        node.status({ fill: 'yellow', text: 'No data for ' + opts.date + '. Some areas only support EUR as currency' })
+      } else {
+        node.status({ fill: 'yellow', text: 'No data found for ' + opts.date })
+      }
+      throw errorText
+    }
+    const area = Object.keys(returnedData.multiAreaEntries[0].entryPerArea)[0]
+    items = returnedData.multiAreaEntries.map(entry => ({
+      price: entry.entryPerArea[area],
+      currency: returnedData.currency,
+      area,
+      timestamp: entry.deliveryStart
+    }))
+    return items
+  } catch {
+    node.status({ fill: 'red', text: 'Error getting data' })
+  }
 }
