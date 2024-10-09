@@ -12,24 +12,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
-        # with:
-          # node-version: 16
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
       - run: npm ci
         continue-on-error: true  # Allow the job to continue even if the test fails
+        id: install
+
       - run: npm test --if-present
         continue-on-error: true  # Allow the job to continue even if the test fails
+        id: test
         if: success() # Only run this step if a previous step did not fail
+
       - name: Upload npm logs as artifact if test fails
         if: failure()  # Only run this step if a previous step has failed
         uses: actions/upload-artifact@v3
         with:
           name: npm-error-log
           path: /home/runner/.npm/_logs/*.log  # Specify the path to the npm logs
+
+      # Explicitly fail the job if the tests failed
       - name: Fail the job if tests failed
-        if: failure()  # Run this step only if a previous step failed
-        run: exit 1  # Explicitly exit with an error code to fail the job
+        if: steps.install.outcome == 'failure' || steps.test.outcome == 'failure' # Check if the test step failed
+        run: exit 1  # Fail the job by exiting with an error code
 
   publish:
     needs: build
@@ -38,10 +42,9 @@ jobs:
     # Only publish on push to main branch
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'  # Only run publish on main branch after a push event
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
         with:
-          # node-version: 16
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm publish
