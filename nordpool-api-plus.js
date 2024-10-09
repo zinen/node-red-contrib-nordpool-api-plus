@@ -15,7 +15,7 @@ module.exports = function (RED) {
     node.status({ text: 'Ready' })
     node.on('input', async function (msg, send, done) {
       const opts = {
-        area: msg.area || node.area || 'Oslo', // See https://www.nordpoolgroup.com/Market-data1/#/nordic/map
+        area: msg.area || node.area || 'NO1', // See https://data.nordpoolgroup.com/map
         currency: msg.currency || node.currency || 'EUR' // can also be 'DKK', 'NOK', 'SEK'
       }
 
@@ -42,9 +42,9 @@ module.exports = function (RED) {
           returnedData = JSON.parse(returnedData)
         } catch (error) {
           // console.log('returnedData JSON parse error content', returnedData)
-          console.error(`Error, returnedData JSON parse error content: ${response.status} - ${response.statusText}`)
+          // console.error(`Error, returnedData JSON parse error content: ${response.status} - ${response.statusText}`)
           console.error(`msg.url, returnedData JSON parse error content: ${msg.url}`)
-          done(returnedData || 'Empty return of fetch')
+          done(returnedData || `Error: ${response.status} - ${response.statusText}`)
           return
         }
         const area = Object.keys(returnedData.multiAreaEntries[0].entryPerArea)[0]
