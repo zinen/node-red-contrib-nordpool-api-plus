@@ -33,7 +33,7 @@ describe('nordpool-api-plus Node', function () {
       const n1 = helper.getNode('n1')
       const n2 = helper.getNode('n2')
       n2.on('input', function (msg) {
-        let errorHappend = false
+        let errorHappened = false
         // console.log('debug: should be able to receive data')
         // console.log(msg)
         try {
@@ -48,9 +48,9 @@ describe('nordpool-api-plus Node', function () {
           should.notEqual(dateParsing, 'Invalid Date')
         } catch (error) {
           console.trace(error)
-          errorHappend = true
+          errorHappened = true
         }
-        if (!errorHappend) done()
+        if (!errorHappened) done()
       })
       n1.receive({ payload: '' })
     })
