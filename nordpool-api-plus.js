@@ -142,7 +142,7 @@ async function prices (node, fetch, opts) {
     } else {
       node.status({ fill: 'yellow', text: 'No data found for ' + opts.date })
     }
-    throw errorText
+    throw new Error(errorText)
   }
   const area = Object.keys(returnedData.multiAreaEntries[0].entryPerArea)[0]
   const items = returnedData.multiAreaEntries.map(entry => ({
