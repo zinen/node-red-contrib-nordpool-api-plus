@@ -18,7 +18,7 @@ module.exports = function (RED) {
       let date = new Date()
       if (node.action === 'dayAhead') {
         date = new Date(date.setDate(date.getDate() + 1))
-      } else if (msg.date) {
+      } else if (node.action !== 'rolling' && msg.date) {
         try {
           date = new Date(msg.date)
         } catch (error) {
@@ -40,13 +40,14 @@ module.exports = function (RED) {
         date = new Date(date.setDate(date.getDate() - 1))
         try {
           opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
+          // Pre append yesterdays data to array
           msg.payload = (await prices(node, fetch, opts)).concat(msg.payload)
         } catch (error) {
           done(error.message)
           return
         }
         date = new Date()
-        date = new Date(date.setDate(date.getDate() + 2))
+        date = new Date(date.setDate(date.getDate() + 1))
         try {
           opts.date = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0')
           msg.payload = msg.payload.concat(
