@@ -126,6 +126,22 @@ describe('nordpool-api-plus Node', function () {
           msg.payload[47].should.property('timestamp')
           const dateParsing = new Date(msg.payload[46].timestamp)
           should.notEqual(dateParsing, 'Invalid Date')
+
+          let date = new Date()
+          // Date of yesterday
+          date = new Date(date.setDate(date.getDate() - 1))
+          should.equal(new Date(msg.payload[12].timestamp).getDate(), date.getDate())
+
+          // Date of today
+          date = new Date()
+          should.equal(new Date(msg.payload[36].timestamp).getDate(), date.getDate())
+
+          if (msg.payload.length > 48) {
+            console.log('Testing rolling data for tomorrow now')
+            // Date of tomorrow
+            date = new Date(date.setDate(date.getDate() + 1))
+            should.equal(new Date(msg.payload[60].timestamp).getDate(), date.getDate())
+          }
         } catch (error) {
           console.error(String(error))
           console.trace(error)
